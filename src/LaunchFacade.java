@@ -15,11 +15,27 @@ public class LaunchFacade {
     public void launchMission() {
         System.out.println("=== Space Mission Launch ===");
 
-        fuelSystem.prepareFuel();
-        navigationSystem.checkNavigation();
-        communicationSystem.connect();
+        if (!fuelSystem.prepareFuel()) {
+            abortLaunch();
+            return;
+        }
+
+        if (!navigationSystem.checkNavigation()) {
+            abortLaunch();
+            return;
+        }
+
+        if (!communicationSystem.connect()) {
+            abortLaunch();
+            return;
+        }
+
         engineSystem.startEngine();
 
         System.out.println("Mission launched successfully!");
+    }
+
+    private void abortLaunch() {
+        System.out.println("Launch aborted!");
     }
 }
